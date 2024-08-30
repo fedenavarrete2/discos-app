@@ -21,12 +21,6 @@ namespace AppDisco
             InitializeComponent();
         }
 
-        private void btnSalir_Click(object sender, EventArgs e)
-        {
-            if(MessageBox.Show("Seguro que desea salir?", "SALIR", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes )
-             this.Close() ;
-        }
-
         private void Discos_Load(object sender, EventArgs e)
         {
             cargar();
@@ -48,7 +42,6 @@ namespace AppDisco
             dgvDiscos.Columns["UrlImagen"].Visible = false;
             dgvDiscos.Columns[0].Visible = false;
         }
-
 
         private void dgvDiscos_SelectionChanged(object sender, EventArgs e)
         {
@@ -78,45 +71,6 @@ namespace AppDisco
             }   
         }
 
-        private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            AltaFrm alta = new AltaFrm();
-            alta.ShowDialog();
-            cargar();
-        }
-
-        private void btnModificar_Click(object sender, EventArgs e)
-        {
-            Disco seleccionado = new Disco();
-            seleccionado = (Disco)dgvDiscos.CurrentRow.DataBoundItem;
-            AltaFrm modificar = new AltaFrm(seleccionado);
-            modificar.ShowDialog();
-            cargar();
-        }
-
-        private void btnBorrar_Click(object sender, EventArgs e)
-        {
-            DiscoNegocio negocio = new DiscoNegocio();
-            Disco eliminado;
-
-            try
-            {
-                if(MessageBox.Show("Seguro que desea borrar este disco?", "Eliminar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) 
-                    == DialogResult.Yes)
-                {
-                    eliminado = (Disco)dgvDiscos.CurrentRow.DataBoundItem;
-                    negocio.eliminar(eliminado.Codigo);
-                    cargar();
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
         private void txtFiltro_TextChanged(object sender, EventArgs e)
         {
             List<Disco> listaFiltrada;
@@ -142,26 +96,13 @@ namespace AppDisco
             }
         }
 
-        private bool soloNumeros(string cadena)
-        {
-            foreach (char caracter in cadena)
-            {
-                if (!(char.IsNumber(caracter)))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-
         private void cboCampo_SelectedIndexChanged(object sender, EventArgs e)
         {
             string opcion = cboCampo.SelectedItem.ToString();
             if(opcion == "Nombre")
             {
                 cboCriterio.Items.Clear();
-                cboCriterio.Items.Add("Comienza con:");
+                cboCriterio.Items.Add("Empieza con:");
                 cboCriterio.Items.Add("Termina con:");
                 cboCriterio.Items.Add("Contiene:");
             }
@@ -204,6 +145,18 @@ namespace AppDisco
             return false;
         }
 
+        private bool soloNumeros(string cadena)
+        {
+            foreach (char caracter in cadena)
+            {
+                if (!(char.IsNumber(caracter)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             DiscoNegocio negocio = new DiscoNegocio();
@@ -222,6 +175,51 @@ namespace AppDisco
 
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            AltaFrm alta = new AltaFrm();
+            alta.ShowDialog();
+            cargar();
+        }
+
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            Disco seleccionado = new Disco();
+            seleccionado = (Disco)dgvDiscos.CurrentRow.DataBoundItem;
+            AltaFrm modificar = new AltaFrm(seleccionado);
+            modificar.ShowDialog();
+            cargar();
+        }
+
+        private void btnBorrar_Click(object sender, EventArgs e)
+        {
+            DiscoNegocio negocio = new DiscoNegocio();
+            Disco eliminado;
+
+            try
+            {
+                if (MessageBox.Show("Seguro que desea borrar este disco?", "Eliminar", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+                    == DialogResult.Yes)
+                {
+                    eliminado = (Disco)dgvDiscos.CurrentRow.DataBoundItem;
+                    negocio.eliminar(eliminado.Codigo);
+                    cargar();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Seguro que desea salir?", "SALIR", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                this.Close();
         }
     }
 }
